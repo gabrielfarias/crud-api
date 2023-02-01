@@ -31,7 +31,7 @@ class Auth
 			$email = $user['email'];
 
 			$headers = array('alg' => 'HS256', 'typ' => 'JWT');
-			$payload = array('email' => $email, 'exp' => (time() + 360));
+			$payload = array('email' => $email, 'exp' => (time() + 3600));
 
 			$jwt = generate_jwt($headers, $payload);
 
