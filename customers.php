@@ -72,9 +72,9 @@ if ($is_jwt_valid) {
           echo json_encode($resultCustormer);
         } else {
           echo '{
-            "status": 405,
-            "name": "Method Not Allowed",
-            "message": "Method not supported"}';
+            "status": 400,
+            "name": "Bad Request",
+            "message": "Unable to list customer"}';
           break;
         }
       }

@@ -50,19 +50,39 @@ class User
 
   public function update($id_user)
   {
-    $sql  = "UPDATE $this->table SET email = :email, password = :password WHERE id_user = :id_user";
+    $sql  = "SELECT id_user FROM $this->table WHERE id_user = :id_user";
     $stmt = $this->connection->prepare($sql);
-    $stmt->bindParam(':email', $this->email);
-    $stmt->bindParam(':password', $this->password);
     $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-    return $stmt->execute();
+    $stmt->execute();
+		$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if (count($users) <= 0) {
+      return false;
+    } else {
+      $sql2  = "UPDATE $this->table SET email = :email, password = :password WHERE id_user = :id_user";
+      $stmt = $this->connection->prepare($sql2);
+      $stmt->bindParam(':email', $this->email);
+      $stmt->bindParam(':password', $this->password);
+      $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+      return $stmt->execute();
+    }
   }
 
   public function delete($id_user)
   {
-    $sql  = "DELETE FROM $this->table WHERE id_user = :id_user";
+    $sql = "SELECT * FROM $this->table WHERE id_user = :id_user";
     $stmt = $this->connection->prepare($sql);
     $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-    return $stmt->execute();
+    $stmt->execute();
+		$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (count($users) <= 0) {
+      
+      return false;
+    } else {
+      $sql2  = "DELETE FROM $this->table WHERE id_user = :id_user";
+      $stmt = $this->connection->prepare($sql2);
+      $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+      return $stmt->execute();
+    }
   }
 }

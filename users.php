@@ -26,6 +26,7 @@ if ($is_jwt_valid) {
       $user->email = $data->email;
       $user->password = $data->password;
       $id_user = $path[0];
+      
       if ($user->update($id_user)) {
         echo '{
           "status": 200,
@@ -62,9 +63,9 @@ if ($is_jwt_valid) {
           echo json_encode($resultUser);
         } else {
           echo '{
-            "status": 405,
-            "name": "Method Not Allowed",
-            "message": "Method not supported"}';
+            "status": 400,
+            "name": "Bad Request",
+            "message": "User not found"}';
           break;
         }
       } else {
@@ -72,9 +73,9 @@ if ($is_jwt_valid) {
           echo json_encode($resultUser);
         } else {
           echo '{
-            "status": 405,
-            "name": "Method Not Allowed",
-            "message": "Method not supported"}';
+            "status": 400,
+            "name": "Bad Request",
+            "message": "Unable to list user"}';
           break;
         }
       }

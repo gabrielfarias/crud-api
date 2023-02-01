@@ -41,19 +41,37 @@ class Customer
 
   public function update($id_customer)
   {
-    $sql  = "UPDATE $this->table SET name = :name, cpf = :cpf WHERE id_customer = :id_customer";
+    $sql  = "SELECT id_customer FROM $this->table WHERE id_customer = :id_customer";
     $stmt = $this->connection->prepare($sql);
-    $stmt->bindParam(':name', $this->name);
-    $stmt->bindParam(':cpf', $this->cpf);
     $stmt->bindParam(':id_customer', $id_customer, PDO::PARAM_INT);
-    return $stmt->execute();
+    $stmt->execute();
+    $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (count($customers) <= 0) {
+      return false;
+    } else {
+      $sql2  = "UPDATE $this->table SET name = :name, cpf = :cpf WHERE id_customer = :id_customer";
+      $stmt = $this->connection->prepare($sql2);
+      $stmt->bindParam(':name', $this->name);
+      $stmt->bindParam(':cpf', $this->cpf);
+      $stmt->bindParam(':id_customer', $id_customer, PDO::PARAM_INT);
+      return $stmt->execute();
+    }
   }
 
   public function delete($id_customer)
   {
-    $sql  = "DELETE FROM $this->table WHERE id_customer = :id_customer";
+    $sql  = "SELECT id_customer FROM $this->table WHERE id_customer = :id_customer";
     $stmt = $this->connection->prepare($sql);
     $stmt->bindParam(':id_customer', $id_customer, PDO::PARAM_INT);
-    return $stmt->execute();
+    $stmt->execute();
+    $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (count($customers) <= 0) {
+      return false;
+    } else {
+      $sql2  = "DELETE FROM $this->table WHERE id_customer = :id_customer";
+      $stmt = $this->connection->prepare($sql2);
+      $stmt->bindParam(':id_customer', $id_customer, PDO::PARAM_INT);
+      return $stmt->execute();
+    }
   }
 }
